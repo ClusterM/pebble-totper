@@ -144,7 +144,7 @@ static void prv_menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, M
                     fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD),
                     GRect(4, y, bounds.size.w - 8, 20),
                     GTextOverflowModeTrailingEllipsis,
-                    GTextAlignmentLeft,
+                    PBL_IF_RECT_ELSE(GTextAlignmentLeft, GTextAlignmentCenter),
                     NULL);
   y += 15;
   
@@ -155,7 +155,7 @@ static void prv_menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, M
                       fonts_get_system_font(FONT_KEY_GOTHIC_14),
                       GRect(4, y, bounds.size.w - 8, 16),
                       GTextOverflowModeTrailingEllipsis,
-                      GTextAlignmentLeft,
+                      PBL_IF_RECT_ELSE(GTextAlignmentLeft, GTextAlignmentCenter),
                       NULL);
     y += 10;
   }

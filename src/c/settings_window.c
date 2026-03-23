@@ -127,7 +127,7 @@ static int16_t prv_menu_get_header_height_callback(MenuLayer *menu_layer, uint16
 }
 
 static void prv_menu_draw_header_callback(GContext* ctx, const Layer *cell_layer, uint16_t section_index, void *data) {
-  menu_cell_basic_header_draw(ctx, cell_layer, "Settings");
+  menu_cell_basic_header_draw(ctx, cell_layer, PBL_IF_RECT_ELSE("Settings", "   Settings"));
 }
 
 static void prv_menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data) {
@@ -230,6 +230,7 @@ static void prv_info_window_load(Window *window) {
   SettingsWindow *settings = window_get_user_data(window);
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
+  const GFont info_font = fonts_get_system_font(FONT_KEY_GOTHIC_18);
   
   // Create text layer for system info
   settings->info_text_layer = text_layer_create(GRect(5, 10, bounds.size.w - 10, bounds.size.h - 20));
@@ -239,8 +240,8 @@ static void prv_info_window_load(Window *window) {
     settings->info_window = NULL;
     return;
   }
-  text_layer_set_font(settings->info_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
-  text_layer_set_text_alignment(settings->info_text_layer, GTextAlignmentLeft);
+  text_layer_set_font(settings->info_text_layer, info_font);
+  text_layer_set_text_alignment(settings->info_text_layer, PBL_IF_RECT_ELSE(GTextAlignmentLeft, GTextAlignmentCenter));
   text_layer_set_overflow_mode(settings->info_text_layer, GTextOverflowModeWordWrap);
   
   // Format system information
@@ -260,6 +261,19 @@ static void prv_info_window_load(Window *window) {
   );
   
   text_layer_set_text(settings->info_text_layer, info_buffer);
+  GSize content_size = graphics_text_layout_get_content_size(
+    info_buffer,
+    info_font,
+    GRect(0, 0, bounds.size.w - 10, bounds.size.h),
+    GTextOverflowModeWordWrap,
+    PBL_IF_RECT_ELSE(GTextAlignmentLeft, GTextAlignmentCenter)
+  );
+  int16_t content_height = content_size.h;
+  int16_t top_margin = (bounds.size.h - content_height) / 2;
+  if (top_margin < 0) {
+    top_margin = 0;
+  }
+  layer_set_frame(text_layer_get_layer(settings->info_text_layer), GRect(5, top_margin, bounds.size.w - 10, content_height));
   layer_add_child(window_layer, text_layer_get_layer(settings->info_text_layer));
 }
 
