@@ -216,6 +216,21 @@ void storage_clear_pin(void) {
   persist_delete(PERSIST_KEY_PIN_HASH);
 }
 
+// Wipe all accounts from storage
+void storage_wipe_all_accounts(void) {
+  size_t count = storage_get_count();
+  
+  // Delete all account data
+  for (size_t i = 0; i < count; i++) {
+    storage_delete_account(i);
+  }
+  
+  // Reset account count to 0
+  storage_set_count(0);
+  
+  APP_LOG(APP_LOG_LEVEL_WARNING, "All accounts wiped from storage");
+}
+
 // ============================================================================
 // Status bar management
 // ============================================================================
