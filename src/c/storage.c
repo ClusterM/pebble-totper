@@ -231,3 +231,18 @@ void storage_set_statusbar_enabled(bool enabled) {
   persist_write_bool(PERSIST_KEY_STATUSBAR_ENABLED, enabled);
 }
 
+// ============================================================================
+// Timeout Vibrate managment
+// ============================================================================
+
+bool storage_is_tovibrate_enabled(void) {
+  if (!persist_exists(PERSIST_KEY_TOVIBRATE_ENABLED)) {
+    return true;  // Default: enabled
+  }
+  return (bool)persist_read_bool(PERSIST_KEY_TOVIBRATE_ENABLED);
+}
+
+void storage_set_tovibrate_enabled(bool enabled) {
+  persist_write_bool(PERSIST_KEY_TOVIBRATE_ENABLED, enabled);
+}
+

@@ -7,7 +7,8 @@
 #define MENU_SECTION_MAIN 0
 #define MENU_ROW_PIN_ACTION 0
 #define MENU_ROW_STATUSBAR_TOGGLE 1
-#define MENU_ROW_SYSTEM_INFO 2
+#define MENU_ROW_TOVIBRATE_TOGGLE 2
+#define MENU_ROW_SYSTEM_INFO 3
 
 typedef enum {
   PIN_MODE_NONE,
@@ -119,7 +120,7 @@ static uint16_t prv_menu_get_num_sections_callback(MenuLayer *menu_layer, void *
 }
 
 static uint16_t prv_menu_get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *data) {
-  return 3;  // PIN action, Status Bar toggle, System Info
+  return 4;  // PIN action, Status Bar toggle, Timeout Vibrate toggle, System Info
 }
 
 static int16_t prv_menu_get_header_height_callback(MenuLayer *menu_layer, uint16_t section_index, void *data) {
@@ -133,6 +134,7 @@ static void prv_menu_draw_header_callback(GContext* ctx, const Layer *cell_layer
 static void prv_menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data) {
   bool has_pin = storage_has_pin();
   bool statusbar_enabled = storage_is_statusbar_enabled();
+  bool tovibrate_enabled = storage_is_tovibrate_enabled();
   
   switch (cell_index->row) {
     case MENU_ROW_PIN_ACTION:
@@ -146,6 +148,11 @@ static void prv_menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, M
     case MENU_ROW_STATUSBAR_TOGGLE:
       menu_cell_basic_draw(ctx, cell_layer, "Status Bar", 
                           statusbar_enabled ? "Enabled" : "Disabled", NULL);
+      break;
+
+    case MENU_ROW_TOVIBRATE_TOGGLE:
+      menu_cell_basic_draw(ctx, cell_layer, "Timeout Vibrate", 
+                          tovibrate_enabled ? "Enabled" : "Disabled", NULL);
       break;
       
     case MENU_ROW_SYSTEM_INFO:
@@ -186,11 +193,11 @@ static void prv_menu_select_callback(MenuLayer *menu_layer, MenuIndex *cell_inde
       }
       break;
       
-    case MENU_ROW_STATUSBAR_TOGGLE:
-      // Toggle status bar setting
+    case MENU_ROW_TOVIBRATE_TOGGLE:
+      // Toggle vibrate timeout setting
       {
-        bool current = storage_is_statusbar_enabled();
-        storage_set_statusbar_enabled(!current);
+        bool current = storage_is_tovibrate_enabled();
+        storage_set_tovibrate_enabled(!current);
         
         // Reload menu to show new status
         menu_layer_reload_data(menu_layer);
@@ -201,6 +208,22 @@ static void prv_menu_select_callback(MenuLayer *menu_layer, MenuIndex *cell_inde
         vibes_short_pulse();
       }
       break;
+
+    case MENU_ROW_STATUSBAR_TOGGLE:
+    // Toggle status bar setting
+    {
+      bool current = storage_is_statusbar_enabled();
+      storage_set_statusbar_enabled(!current);
+      
+      // Reload menu to show new status
+      menu_layer_reload_data(menu_layer);
+      
+      // Reload main window to apply changes
+      ui_reload_window();
+      
+      vibes_short_pulse();
+    }
+    break;
       
     case MENU_ROW_SYSTEM_INFO:
       // Create and show system info window
