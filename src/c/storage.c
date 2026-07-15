@@ -14,12 +14,17 @@ typedef struct {
 } __attribute__((__packed__)) PersistedAccount;
 
 #ifdef DEBUG
-// Create fake account for debug mode
+// Create fake account for debug mode and screenshots
 static void prv_create_fake_account(size_t id, TotpAccount *account) {
   memset(account, 0, sizeof(*account));
   
   // Base32 test secret: "JBSWY3DPEHPK3PXP" = "Hello!" in bytes
   const uint8_t test_secret[] = {0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x21};
+  const uint8_t test_secret2[] = {0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x22};
+  const uint8_t test_secret3[] = {0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x23};
+  const uint8_t test_secret4[] = {0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x24};
+  const uint8_t test_secret5[] = {0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x25};
+  const uint8_t test_secret6[] = {0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x26};
   
   switch (id % 6) {
     case 0:
@@ -35,8 +40,8 @@ static void prv_create_fake_account(size_t id, TotpAccount *account) {
     case 1:
       strncpy(account->label, "Google", sizeof(account->label) - 1);
       strncpy(account->account_name, "test@gmail.com", sizeof(account->account_name) - 1);
-      memcpy(account->secret, test_secret, sizeof(test_secret));
-      account->secret_len = sizeof(test_secret);
+      memcpy(account->secret, test_secret2, sizeof(test_secret2));
+      account->secret_len = sizeof(test_secret2);
       account->period = 30;
       account->digits = 6;
       account->algorithm = TOTP_ALGO_SHA1;
@@ -45,8 +50,8 @@ static void prv_create_fake_account(size_t id, TotpAccount *account) {
     case 2:
       strncpy(account->label, "Microsoft", sizeof(account->label) - 1);
       strncpy(account->account_name, "work@outlook.com", sizeof(account->account_name) - 1);
-      memcpy(account->secret, test_secret, sizeof(test_secret));
-      account->secret_len = sizeof(test_secret);
+      memcpy(account->secret, test_secret3, sizeof(test_secret3));
+      account->secret_len = sizeof(test_secret3);
       account->period = 30;
       account->digits = 8;
       break;
@@ -54,8 +59,8 @@ static void prv_create_fake_account(size_t id, TotpAccount *account) {
     case 3:
       strncpy(account->label, "Amazon", sizeof(account->label) - 1);
       strncpy(account->account_name, "", sizeof(account->account_name) - 1);
-      memcpy(account->secret, test_secret, sizeof(test_secret));
-      account->secret_len = sizeof(test_secret);
+      memcpy(account->secret, test_secret4, sizeof(test_secret4));
+      account->secret_len = sizeof(test_secret4);
       account->period = 30;
       account->digits = 6;
       account->algorithm = TOTP_ALGO_SHA1;
@@ -64,8 +69,8 @@ static void prv_create_fake_account(size_t id, TotpAccount *account) {
     case 4:
       strncpy(account->label, "Custom Service", sizeof(account->label) - 1);
       strncpy(account->account_name, "admin", sizeof(account->account_name) - 1);
-      memcpy(account->secret, test_secret, sizeof(test_secret));
-      account->secret_len = sizeof(test_secret);
+      memcpy(account->secret, test_secret5, sizeof(test_secret5));
+      account->secret_len = sizeof(test_secret5);
       account->period = 60;
       account->digits = 6;
       break;
@@ -73,7 +78,7 @@ static void prv_create_fake_account(size_t id, TotpAccount *account) {
     default:
       strncpy(account->label, "Test Account", sizeof(account->label) - 1);
       strncpy(account->account_name, "", sizeof(account->account_name) - 1);
-      memcpy(account->secret, test_secret, sizeof(test_secret));
+      memcpy(account->secret, test_secret6, sizeof(test_secret6));
       account->secret_len = sizeof(test_secret);
       account->period = 30;
       account->digits = 6;

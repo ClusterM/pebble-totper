@@ -1,7 +1,7 @@
 {
   "name": "totper",
   "author": "Alexey Cluster",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "keywords": ["pebble-app", "totp", "authenticator"],
   "private": true,
   "dependencies": {},
@@ -16,7 +16,8 @@
       "chalk",
       "diorite",
       "emery",
-      "flint"
+      "flint",
+      "gabbro"
     ],
     "watchapp": {
       "watchface": false

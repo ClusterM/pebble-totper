@@ -1,6 +1,6 @@
 #pragma once
 
-#define VERSION "1.2"
+#define VERSION "1.3"
 
 #define MEMORY_CRITICAL_LEVEL 4000
 
