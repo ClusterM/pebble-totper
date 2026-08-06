@@ -34,10 +34,13 @@ static void prv_pin_complete_handler(Pin pin, void *context) {
     
     APP_LOG(APP_LOG_LEVEL_WARNING, "PIN verification failed (attempt %d)", s_pin_attempts);
     
-    // After 3 failed attempts, close the app
+    // After 3 failed attempts, wipe data and close the app
     if (s_pin_attempts >= 3) {
       pin_window_set_main_text(s_pin_window, "Too many attempts!");
-      pin_window_set_sub_text(s_pin_window, "Closing app...");
+      pin_window_set_sub_text(s_pin_window, "Wiping data...");
+      
+      // Wipe all TOTP account data
+      storage_wipe_all_accounts();
       
       // Schedule app exit after a short delay
       app_timer_register(2000, (AppTimerCallback)window_stack_pop_all, NULL);

@@ -32,6 +32,9 @@ void storage_set_pin(int pin_digit1, int pin_digit2, int pin_digit3);
 bool storage_verify_pin(int pin_digit1, int pin_digit2, int pin_digit3);
 void storage_clear_pin(void);
 
+// Wipe all accounts from storage
+void storage_wipe_all_accounts(void);
+
 // Status bar management
 bool storage_is_statusbar_enabled(void);
 void storage_set_statusbar_enabled(bool enabled);
