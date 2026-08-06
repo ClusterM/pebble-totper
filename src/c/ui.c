@@ -188,6 +188,9 @@ void ui_update_codes(void) {
   time_t now = time(NULL);
   bool needs_redraw = false;
   bool needs_vibe = false;
+
+  // Timeout Vibrate if enabled
+  bool tovibrate_enabled = storage_is_tovibrate_enabled();
   
   for (size_t i = 0; i < s_total_account_count; i++) {
     AccountCache *cache = &s_account_cache[i];
@@ -219,7 +222,7 @@ void ui_update_codes(void) {
     layer_mark_dirty(menu_layer_get_layer(s_menu_layer));
   }
 
-  if (needs_vibe) {
+  if (tovibrate_enabled && needs_vibe) {
     uint32_t const segments[] = { 50 };
     VibePattern pat = {
       .durations = segments,
